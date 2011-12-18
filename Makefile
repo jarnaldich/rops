@@ -1,8 +1,13 @@
+# Makefile for ROP scheme.
+#
+# TODO: Add rules for generating a native-code interpreter.
+#
+
 CAMLBIN=/usr/local/bin/
 CAMLC = $(CAMLBIN)ocamlc -I +camlp4 dynlink.cma camlp4lib.cma -pp camlp4of.opt
 CAMLOPT = $(CAMLBIN)ocamlopt  -I +camlp4 dynlink.cma camlp4lib.cma -pp camlp4of.opt
 MKTOP = $(CAMLBIN)ocamlmktop -I +camlp4 dynlink.cma camlp4lib.cma -pp camlp4of.opt
-EXEC = hump
+EXEC = rops
 
 .SUFFIXES: .ml .mli .cmo .cmi .cmx
 
@@ -12,8 +17,8 @@ EXEC = hump
 .mli.cmi:
 	$(CAMLC) -c $<
 
-$(EXEC): utils.cmo  schemeTypes.cmo reader.cmi reader.cmo printer.cmo repl.cmo 
-	$(CAMLC) $(CUSTOM) -o $(EXEC) $(LIBS) $(filter %.cmo, $^)
+$(EXEC): utils.cmo  schemeTypes.cmo reader.cmi builtins.cmi builtins.cmo reader.cmo printer.cmo repl.cmo 
+	$(CAMLC) -o $(EXEC) $(filter %.cmo, $^)
 
 console: utils.cmo printer.cmo reader.cmo
 	$(MKTOP) $^ -o console
