@@ -7,7 +7,16 @@ let print_prompt () =
   print_flush ();;
 
 let print_obj obj =
-  Printer.display Format.std_formatter obj; print_flush ();;
+  Printer.display Format.std_formatter obj;  print_flush ();;
 
-let _ =
-    print_obj (Reader.read_str (read_line ()));;
+let s = (Stream.of_channel stdin);;
+
+
+let rec repl () =
+  print_prompt ();
+  let s = (Stream.of_channel stdin) in
+  print_obj (Evaluator.eval (Reader.read_stream "<stdin>" s));
+  print_newline (); print_int (Stream.count s); print_newline();
+  repl ();;
+
+let _ = repl ();;

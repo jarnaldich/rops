@@ -1,4 +1,4 @@
 type builtin =
-    (SchemeTypes.scheme_obj list) -> (SchemeTypes.scheme_obj option);;
+    (SchemeTypes.scheme_obj list) -> SchemeTypes.scheme_obj;;
 
-val builtin_option : string -> builtin option;;
+val of_string : string -> builtin option;;

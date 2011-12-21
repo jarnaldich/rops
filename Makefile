@@ -4,9 +4,9 @@
 #
 
 CAMLBIN=/usr/local/bin/
-CAMLC = $(CAMLBIN)ocamlc -I +camlp4 dynlink.cma camlp4lib.cma -pp camlp4of.opt
-CAMLOPT = $(CAMLBIN)ocamlopt  -I +camlp4 dynlink.cma camlp4lib.cma -pp camlp4of.opt
-MKTOP = $(CAMLBIN)ocamlmktop -I +camlp4 dynlink.cma camlp4lib.cma -pp camlp4of.opt
+CAMLC = $(CAMLBIN)ocamlc -I +camlp4 dynlink.cma camlp4lib.cma -pp $(CAMLBIN)camlp4of.opt
+CAMLOPT = $(CAMLBIN)ocamlopt  -I +camlp4 dynlink.cma camlp4lib.cma -pp $(CAMLBIN)camlp4of.opt
+MKTOP = $(CAMLBIN)ocamlmktop -I +camlp4 dynlink.cma camlp4lib.cma -pp $(CAMLBIN)camlp4of.opt
 EXEC = rops
 
 .SUFFIXES: .ml .mli .cmo .cmi .cmx
@@ -17,10 +17,10 @@ EXEC = rops
 .mli.cmi:
 	$(CAMLC) -c $<
 
-$(EXEC): utils.cmo  schemeTypes.cmo reader.cmi builtins.cmi builtins.cmo reader.cmo printer.cmo repl.cmo 
+$(EXEC): utils.cmo  schemeTypes.cmo reader.cmi builtins.cmi builtins.cmo evaluator.cmo reader.cmo printer.cmo repl.cmo 
 	$(CAMLC) -o $(EXEC) $(filter %.cmo, $^)
 
-console: utils.cmo printer.cmo reader.cmo
+console: utils.cmo printer.cmo schemeTypes.cmo reader.cmo builtins.cmo evaluator.cmo
 	$(MKTOP) $^ -o console
 
 all: $(EXEC)
