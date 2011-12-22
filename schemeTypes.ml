@@ -14,3 +14,5 @@ let lift_int = function
 let scheme_obj_of_bool = function
   | true -> True
   | false -> False;;
+
+exception SchemeLexerError of (string * Lexing.position);;

@@ -3,13 +3,21 @@
 # TODO: Add rules for generating a native-code interpreter.
 #
 
-CAMLBIN=/usr/local/bin/
+CAMLBIN=
 CAMLC = $(CAMLBIN)ocamlc -I +camlp4 dynlink.cma camlp4lib.cma -pp $(CAMLBIN)camlp4of.opt
 CAMLOPT = $(CAMLBIN)ocamlopt  -I +camlp4 dynlink.cma camlp4lib.cma -pp $(CAMLBIN)camlp4of.opt
+CAMLLEX = $(CAMLBIN)ocamllex
+CAMLYACC = $(CAMLBIN)ocamlyacc
 MKTOP = $(CAMLBIN)ocamlmktop -I +camlp4 dynlink.cma camlp4lib.cma -pp $(CAMLBIN)camlp4of.opt
-EXEC = rops
+EXEC = rops.exe
 
-.SUFFIXES: .ml .mli .cmo .cmi .cmx
+.SUFFIXES: .ml .mli .cmo .cmi .cmx .mly .mll
+
+.mly.ml:
+	$(CAMLYACC) $<
+
+.mll.ml:
+	$(CAMLLEX) $<
 
 .ml.cmo:
 	$(CAMLC) -c $<
@@ -17,17 +25,22 @@ EXEC = rops
 .mli.cmi:
 	$(CAMLC) -c $<
 
-$(EXEC): utils.cmo  schemeTypes.cmo reader.cmi builtins.cmi builtins.cmo evaluator.cmo reader.cmo printer.cmo repl.cmo 
+all: $(EXEC)
+
+$(EXEC): schemeTypes.cmo parser.cmi parser.cmo lexer.cmo utils.cmo  reader.cmi builtins.cmi builtins.cmo evaluator.cmo reader.cmo printer.cmo repl.cmo 
 	$(CAMLC) -o $(EXEC) $(filter %.cmo, $^)
+
+parser.cmi parser.cmo: parser.ml
 
 console: utils.cmo printer.cmo schemeTypes.cmo reader.cmo builtins.cmo evaluator.cmo
 	$(MKTOP) $^ -o console
 
-all: $(EXEC)
 
 clean::
 	rm -f *.cm[iox] *~ .*~ #*#
 	rm -f $(EXEC)
 	rm -f schemeTypes.mli
+	rm -f parser.ml parser.mli
+	rm -f lexer.ml lexer.mli
 	rm -f console
 	rm -f $(EXEC).opt

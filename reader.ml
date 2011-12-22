@@ -17,10 +17,10 @@ EXTEND SchemeGram
   lis: 
       [ [ l = LIST0 [ a = sexp -> a ] -> l ] ];
 
-  sexp2:
+  sexp:
     [ [ "("; l = lis ; ")" -> List l 
       | "("; l = lis ; "."; b = sexp; ")" -> DottedList (l, b) ]
-    | [ `INT (i, _) -> Int i 
+    | [ `INT (i, _) -> Int i
       | `LIDENT s -> Symbol s
       | "#f" -> False
       | "#t" -> True
@@ -28,9 +28,10 @@ EXTEND SchemeGram
       | `STRING (s, _) -> String s ]
     ];
 
-  sexp: [ [ s = sexp2 ; EOI  -> s ] ];
+  (* sexp: [ [ s = sexp2 ; EOI  -> s ] ]; *)
 
 END;;
 
 let read_stream name = SchemeGram.parse sexp (Loc.mk name) ;;
 let read_string = SchemeGram.parse_string sexp (Loc.mk "<string>");;
+
