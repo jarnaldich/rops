@@ -12,7 +12,7 @@ let rec display ff obj =
   match obj with
       Int (i) -> print_int i
     | String (s) -> print_string ("\""^s^"\"")
-    | Symbol (s) -> print_string ("/"^s)
+    | Symbol (s) -> print_string ("'"^s)
     | True -> print_string "#t"
     | False -> print_string "#f"
     | List (l) ->

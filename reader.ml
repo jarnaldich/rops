@@ -17,7 +17,7 @@ EXTEND SchemeGram
   lis: 
       [ [ l = LIST0 [ a = sexp -> a ] -> l ] ];
 
-  sexp:
+  sexp2:
     [ [ "("; l = lis ; ")" -> List l 
       | "("; l = lis ; "."; b = sexp; ")" -> DottedList (l, b) ]
     | [ `INT (i, _) -> Int i
@@ -28,7 +28,7 @@ EXTEND SchemeGram
       | `STRING (s, _) -> String s ]
     ];
 
-  (* sexp: [ [ s = sexp2 ; EOI  -> s ] ]; *)
+  sexp: [ [ s = sexp2 ; EOI  -> s ] ]; 
 
 END;;
 
