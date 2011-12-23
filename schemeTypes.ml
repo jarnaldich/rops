@@ -15,4 +15,15 @@ let scheme_obj_of_bool = function
   | true -> True
   | false -> False;;
 
+type token = 
+  | SYMBOL  of string
+  | INT  of int
+  | STRING  of string
+  | TRUE
+  | FALSE
+  | LBRACKET
+  | RBRACKET
+  | LPAREN
+  | RPAREN
+
 exception SchemeLexerError of (string * Lexing.position);;

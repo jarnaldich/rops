@@ -7,8 +7,7 @@
 open Camlp4.PreCast;;
 open SchemeTypes;;
 
-module SchemeGram = MakeGram(Lexer);;
-
+module SchemeGram = MakeGram(P4Lexer);;
 let sexp = SchemeGram.Entry.mk "sexp"
 
 EXTEND SchemeGram
@@ -17,18 +16,16 @@ EXTEND SchemeGram
   lis: 
       [ [ l = LIST0 [ a = sexp -> a ] -> l ] ];
 
-  sexp2:
-    [ [ "("; l = lis ; ")" -> List l 
-      | "("; l = lis ; "."; b = sexp; ")" -> DottedList (l, b) ]
-    | [ `INT (i, _) -> Int i
-      | `LIDENT s -> Symbol s
-      | "#f" -> False
-      | "#t" -> True
+  sexp:
+    [ [ LPAREN ; l = lis ; RPAREN -> List l 
+      | LPAREN ; l = lis ; "."; b = sexp; RPAREN -> DottedList (l, b) ]
+    | [ `INT i -> Int i
+      | FALSE -> False
+      | TRUE -> True
       | `SYMBOL s -> Symbol s
-      | `STRING (s, _) -> String s ]
+      | `STRING s -> String s ]
     ];
 
-  sexp: [ [ s = sexp2 ; EOI  -> s ] ]; 
 
 END;;
 

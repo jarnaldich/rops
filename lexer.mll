@@ -2,7 +2,7 @@
   Scanner For A Scheme-like language
  *)
 {
-open Parser;;
+open SchemeTypes;;
 open Lexing;;
 
 exception Eof;;

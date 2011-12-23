@@ -27,12 +27,12 @@ EXEC = rops.exe
 
 all: $(EXEC)
 
-$(EXEC): schemeTypes.cmo parser.cmi parser.cmo lexer.cmo utils.cmo  reader.cmi builtins.cmi builtins.cmo evaluator.cmo reader.cmo printer.cmo repl.cmo 
+$(EXEC): schemeTypes.cmo p4Error.cmo lexer.cmo p4Lexer.cmo utils.cmo reader.cmi builtins.cmi builtins.cmo evaluator.cmo reader.cmo printer.cmo repl.cmo 
 	$(CAMLC) -o $(EXEC) $(filter %.cmo, $^)
 
 parser.cmi parser.cmo: parser.ml
 
-console: utils.cmo printer.cmo schemeTypes.cmo reader.cmo builtins.cmo evaluator.cmo
+console: utils.cmo lexer.cmo p4Lexer.cmo printer.cmo schemeTypes.cmo reader.cmo builtins.cmo evaluator.cmo
 	$(MKTOP) $^ -o console
 
 
