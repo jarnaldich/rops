@@ -1,3 +1,7 @@
 *.cm?
 rops
+rops.exe
+parser.ml
+parser.mli
 console
+

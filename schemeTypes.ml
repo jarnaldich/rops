@@ -16,3 +16,6 @@ let scheme_obj_of_bool = function
   | false -> False;;
 
 exception SchemeLexerError of (string * Lexing.position);;
+exception SchemeEvalError of string;;
+
+let eval_error s = raise (SchemeEvalError s);;

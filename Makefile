@@ -13,9 +13,6 @@ EXEC = rops.exe
 
 .SUFFIXES: .ml .mli .cmo .cmi .cmx .mly .mll
 
-.mly.ml:
-	$(CAMLYACC) $<
-
 .mll.ml:
 	$(CAMLLEX) $<
 
@@ -27,10 +24,15 @@ EXEC = rops.exe
 
 all: $(EXEC)
 
-$(EXEC): schemeTypes.cmo parser.cmi parser.cmo lexer.cmo utils.cmo  reader.cmi builtins.cmi builtins.cmo evaluator.cmo reader.cmo printer.cmo repl.cmo 
+$(EXEC): schemeTypes.cmo parser.cmo lexer.cmo utils.cmo  reader.cmi builtins.cmi builtins.cmo evaluator.cmo reader.cmo printer.cmo repl.cmo 
 	$(CAMLC) -o $(EXEC) $(filter %.cmo, $^)
 
-parser.cmi parser.cmo: parser.ml
+parser.cmi parser.cmo: parser.mli parser.ml 
+	$(CAMLC) -c parser.mli
+	$(CAMLC) -c parser.ml
+
+parser.mli parser.ml: parser.mly
+	$(CAMLYACC) $<
 
 console: utils.cmo printer.cmo schemeTypes.cmo reader.cmo builtins.cmo evaluator.cmo
 	$(MKTOP) $^ -o console

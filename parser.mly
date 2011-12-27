@@ -4,7 +4,7 @@ open SchemeTypes;;
 
 %token <int> INT
 %token <string> SYMBOL STRING 
-%token LPAREN RPAREN LBRACKET RBRACKET DOT EOF
+%token LPAREN RPAREN LBRACKET RBRACKET DOT EOF TRUE FALSE
 
 %start sexp
 %type <SchemeTypes.scheme_obj> sexp
@@ -27,6 +27,8 @@ sexp
     : list                                        {  $1; }
     | SYMBOL                                      {  SchemeTypes.Symbol $1 }
     | STRING                                      {  SchemeTypes.String $1 }
-    | INT                                         {  SchemeTypes.Int $1; }
+    | INT                                         {  SchemeTypes.Int $1 }
+    | TRUE                                        {  SchemeTypes.True }
+    | FALSE                                       {  SchemeTypes.False }                
     ;
 %%
